@@ -1,0 +1,22 @@
+name: Send Discord Pull Request Approval Notification
+
+on:
+  pull_request:
+    types: [opened, reopened]
+  pull_request_review:
+    types: [submitted,edited, dismissed]
+  pull_request_review_comment:
+    types: [created, deleted, edited]
+
+jobs:
+  send-discord-message:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Discord Message
+        uses: Ilshidur/action-discord@master
+        with:
+          args: >
+            New Pull Request from: ${{ github.actor }}
+            Approve now at: ${{ github.server_url }}/${{ github.repository }}/pull/${{ github.event.pull_request.number }}
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
